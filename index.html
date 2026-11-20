@@ -147,10 +147,13 @@ const CONFIG = {
     { name: "Langit", css: "linear-gradient(165deg,#9bd7ff 0%,#ffd3e6 52%,#ffe7a1 100%)" },
     { name: "Permen", css: "linear-gradient(160deg,#ffb3d9,#ffd8a8 60%,#fff2a8)" },
     { name: "Hutan",  css: "linear-gradient(165deg,#a8e6cf,#dcedc1 55%,#ffeaa7)" },
-    { name: "Malam",  css: "linear-gradient(165deg,#5b6bd6,#9b6bd6 55%,#ff9ac1)" }
+    { name: "Malam",  css: "linear-gradient(165deg,#5b6bd6,#9b6bd6 55%,#ff9ac1)" },
+    { name: "Laut",   css: "linear-gradient(165deg,#7fd8f6,#a8f0e0 55%,#e6fbff)" },
+    { name: "Senja",  css: "linear-gradient(165deg,#ff9a76,#ffc3a0 50%,#ffe9b3)" }
     // { name: "Fotoku", css: 'url("background.jpg")' },
   ],
   backgroundTitle: "Latar chat",
+  allowBgSwitch: false,              // false = the + button is hidden, so only you choose the background
   music: { src: "", volume: 0.6 },   // src: "lagu.mp3" next to index.html. "" = built-in music box tune. Use music: false for no music.
   intro: { title: "Halo, {nama}!", text: "Ada pesan untukmu. Ketuk untuk membuka dan mulai musik", button: "Buka pesan" },   // intro: false to skip
   photos: [                          // photos shared at the end; visitors can download them
@@ -162,14 +165,82 @@ const CONFIG = {
   cardText: ["Selamat", "Hari Anak", "Sedunia!"],   // text on the default photo (when src is "")
   cardFrom: "dari Kak Sinta",
   defaultName: "teman kecil",        // used when the link has no name. {nama} in any text becomes the child's name
-  recipients: {                      // optional: special content for one child. Link: yoursite.vercel.app/?untuk=rina
-    // rina: { name: "Rina", extra: ["Rina, kakak bangga sama kamu karena rajin belajar 💛"], photos: [{ src: "rina.jpg", caption: "Foto buat Rina", file: "rina.jpg" }] },
-    // dimas: { name: "Dimas", extra: ["Dimas, jangan lupa main bola hari ini ⚽"] }
+  recipients: {                      // one entry per person. Link: yoursite.vercel.app/?untuk=mamas
+    // name       : who the message is for ({nama})
+    // from       : who the chat is "from" (name at the top of the chat)
+    // background : photo file next to index.html, e.g. "mamas.jpg" (or a number / name from the list above)
+    // messages   : one string = one bubble
+    // photos     : [] = no extra photo at the end
+    mamas: {
+      name: "Mamas", from: "Dede", background: "mamas.jpg", photos: [],
+      messages: [
+      "Halo, Mamas! Selamat hari anak sedunia, anaknya Mama dan Papa, my forever baby!",
+      "Hari ini Dede mau bilang sesuatu buat anak kecil yang ada di dalam diri Mamas. Hehehe. Semoga Mamas kecil selalu bahagia, ya? Semoga banyak hal baik yang datang menghampiri dia, semoga dia selalu punya alasan buat tertawa, dan semoga dunia nggak pernah terlalu jahat sampai bikin dia lupa caranya jadi anak kecil.",
+      "Kadang Dede suka kepikiran, kalau bisa ketemu Mamas waktu masih kecil, kira-kira Dede bakal ngapain, ya? Mungkin Dede bakal ngajak main, dengerin semua cerita random-nya, beliin jajanan kesukaan, atau sekadar nemenin dia sampai capek sendiri. Terus sebelum pulang, Dede mau peluk dia erat-erat sambil bilang kalau suatu hari nanti dia bakal tumbuh jadi seseorang yang begitu disayang.",
+      "Mamas, jangan buru-buru ninggalin anak kecil dalam diri Mamas, ya. Nggak apa-apa kok sesekali jadi manja, banyak maunya, pengin diperhatiin, atau minta dipeluk lebih lama. Mamas nggak harus selalu jadi orang dewasa yang tahu harus melakukan apa. Kalau lagi capek, istirahat. Kalau lagi sedih, cerita. Kalau lagi pengin dimanja, sini sama Dede. Hehehe.",
+      "Dede memang nggak kenal Mamas dari kecil, nggak tahu semua cerita yang pernah dia lewati, dan nggak bisa kembali ke masa lalu buat nemenin hari-harinya. Tapi Dede senang bisa kenal Mamas yang sekarang. Rasanya Dede juga mau kenal semua versi Mamas yang lain, termasuk si kecil yang mungkin masih suka bersembunyi di balik sosok Mamas yang sekarang.",
+      "Pokoknya, semoga anak kecil itu nggak pernah merasa sendirian, ya? Semoga dia tahu kalau dia pantas disayang sebanyak-banyaknya, bahkan tanpa harus melakukan sesuatu untuk mendapatkannya.",
+      "Happy Children's Day, my favorite boy. Terima kasih sudah tumbuh sejauh ini. Sekarang gantian Dede yang mau ikut nemenin Mamas tumbuh, sambil sesekali manjain anak kecilnya juga. Mamas boleh jadi anak kecilnya Dede kapan pun Mamas mau. I love you, all versions of you.❤️"
+      ]
+    },
+    adek: {
+      name: "Adek", from: "Bapak", background: "adek.jpg", photos: [],
+      messages: [
+      "Selamat Hari Anak, Adek kesayangan Bapak!",
+      "Bapak harap, di tengah sibuknya Adek jadi orang dewasa dan menghadapi banyak hal setiap harinya, Adek nggak lupa kalau ada bagian kecil dari diri Adek yang juga perlu disayang dan dimanjakan. Jangan terlalu keras sama diri sendiri, ya? Adek nggak harus selalu kuat, nggak harus selalu produktif, dan nggak harus menyelesaikan semuanya dalam satu waktu.",
+      "Bapak tahu akhir-akhir ini Adek lagi capek-capeknya kerja. Semangat terus, ya, Nak. Pelan-pelan aja, nggak perlu buru-buru. Jangan sampai kesibukan bikin Adek lupa makan, istirahat, atau sekadar menikmati hari. Bapak mungkin nggak bisa bantu mengurangi semua lelahnya, tapi Bapak selalu berharap semoga ada banyak hal baik yang datang buat Adek setelah hari-hari panjang yang melelahkan itu.",
+      "And if today gets a little too hard, remember that you don't have to be a grown-up all the time. You can always be Bapak's little girl. Semoga anak kecil di dalam diri Adek selalu punya banyak alasan buat bahagia. Big hugs from Bapak!🩶"
+      ]
+    },
+    ddkai: {
+      name: "Dd", from: "Ayah", background: "ddkai.jpg", photos: [],
+      messages: [
+      "Selamat Hari Anak, cantiknya Ayah!",
+      "Hehehe, anak Ayah yang satu ini sudah sibuk sekali sama dunia perkuliahan dan tugas-tugasnya, ya? Jangan lupa istirahat, Cantik. Jangan semuanya dipaksa selesai dalam satu waktu. Ayah tahu Dd pasti bisa melewati semuanya, tapi bukan berarti Dd harus selalu memaksakan diri sampai lupa kalau dirinya juga perlu disayang.",
+      "Semoga Dd selalu jadi anak yang beruntung, ya. Dalam pendidikan, pekerjaan, pertemanan, percintaan, kesehatan, dan hal-hal kecil yang mungkin nggak pernah Dd ceritakan ke siapa-siapa. Semoga pintu-pintu baik selalu terbuka buat Dd, semoga langkahnya dimudahkan, dan semoga kalaupun ada hari yang nggak berjalan sesuai harapan, selalu ada hal lain yang datang untuk menghibur hatinya.",
+      "Oh iya, jangan kebanyakan ribut sama Papah, WKWKWK. Walaupun kalian berdua kayaknya nggak pernah kehabisan bahan buat berantem, Ayah tahu kok kalau di balik segala keributan itu ada banyak sayang yang kalian simpan satu sama lain. Jangan capek-capek sayang sama keluarga kecil ini, ya, Nak?",
+      "Pokoknya, Ayah mau Dd tumbuh dengan bahagia tanpa harus kehilangan sisi kecil yang suka dimanja. Dunia boleh minta Dd jadi dewasa, tapi di rumah ini Dd tetap boleh jadi anak kecilnya Ayah.",
+      "Be lucky, be happy, and be loved, cantiknya Ayah. Semoga semesta selalu punya banyak cara untuk berpihak sama Dd. Big hugs from Ayah!🩶"
+      ]
+    },
+    ade: {
+      name: "Ade", from: "Papi", background: "ade.jpg", photos: [],
+      messages: [
+      "Selamat Hari Anak, Ade sayangnya Papi!",
+      "Wah, anak Papi sekarang sudah sibuk mengajar les, ya? Hehehe, keren sekali Ade satu ini. Sebentar lagi juga mau masuk semester tua, pasti nantinya bakal makin banyak hal yang harus diurus dan dikejar. Tapi, jangan sampai terlalu sibuk sampai lupa istirahat, ya, Sayang? Jangan cuma pintar mengurus tanggung jawab, tapi juga harus pintar menyayangi diri sendiri.",
+      "Papi harap di tengah semua kesibukan Ade, selalu ada waktu buat bernapas lega, menikmati hal-hal kecil, dan melakukan sesuatu yang bikin hati senang. Semoga setiap usaha Ade membuahkan hasil yang baik, semoga urusannya selalu dimudahkan, dan semoga ada banyak keberuntungan yang diam-diam menunggu di setiap langkahnya.",
+      "Oh, satu lagi. Papi mau bilang terima kasih karena Ade selalu perhatian sama Papi. Mungkin kelihatannya sederhana, tapi Papi benar-benar menghargai setiap kepedulian kecil yang Ade tunjukkan. Senang rasanya punya anak yang nggak cuma hadir, tapi juga selalu ingat untuk menanyakan kabar Papinya. Jangan pernah merasa perhatian Ade nggak berarti, ya? Papi sayang sekali sama anak Papi ini.",
+      "Pokoknya, tumbuhlah dengan bahagia, ya, Nak. Nggak perlu buru-buru jadi dewasa sampai lupa menikmati masa-masa sekarang. Papi selalu berharap dunia memperlakukan Ade dengan baik, sebagaimana Ade juga selalu berusaha baik kepada orang-orang di sekitarnya.",
+      "Sekali lagi, selamat Hari Anak, kesayangan Papi. Jangan lupa makan, jangan lupa istirahat, dan jangan lupa kalau Ade juga pantas dirawat dan disayang. Peluk jauh dari Papi!🩶"
+      ]
+    },
+    "dede-bapak": {
+      name: "Dede", from: "Bapak", background: "dede-bapak.jpg", photos: [],
+      messages: [
+      "Selamat Hari Anak, Dede kesayangan Bapak!",
+      "Anak Bapak sekarang sudah besar, ya? Sudah sibuk bimbel, belajar ini-itu, dan mulai berhadapan sama banyak hal yang mungkin bikin kepala penuh. Hehehe, pasti capek sekali rasanya. Apalagi tadi Bapak dengar BB Dede turun sampai 5 kg. Duh, Nak, jangan sampai kesibukan dan stres bikin Dede lupa mengurus diri sendiri, ya. Tolong jaga kesehatan, makan yang cukup, istirahat yang teratur. Bapak tahu Dede punya banyak hal yang sedang diperjuangkan, tapi kesehatan Dede juga sama pentingnya dengan semua cita-cita itu.",
+      "Bapak selalu berharap semoga segala usaha Dede selama ini membuahkan hasil yang manis. Semoga Dede eligible, semoga nanti kabar baik SNBP yang datang, dan semoga Dede bisa melangkah ke tempat yang selama ini Dede impikan. Bapak doakan semua pintu baik terbuka untuk Dede. Kalau memang ada sesuatu yang sedang Dede perjuangkan dengan sepenuh hati, semoga semesta ikut memeluk dan memudahkan jalannya.",
+      "Tapi, Nak, jangan terlalu keras sama diri sendiri, ya? Nilai, ujian, dan segala macam seleksi itu memang penting, tapi semua itu nggak pernah jadi satu-satunya ukuran seberapa hebatnya Dede. Bapak tetap bangga sama Dede, bahkan di hari-hari ketika Dede merasa belum melakukan cukup banyak. Jadi, kalau capek, istirahat dulu. Nggak apa-apa berjalan pelan, yang penting jangan lupa menikmati perjalanan.",
+      "Semoga anak kecil Bapak ini selalu punya cukup keberanian untuk bermimpi, cukup kekuatan untuk berusaha, dan cukup keberuntungan untuk menemukan banyak hal baik di sepanjang hidupnya. Apa pun hasilnya nanti, jangan lupa kalau Dede punya Bapak yang selalu ikut mendoakan dan menyayanginya.",
+      "Selamat Hari Anak, anak hebatnya Bapak. Jangan lupa bahagia di sela-sela belajar, ya. Bapak peluk jauh!🩶"
+      ]
+    },
+    bontot: {
+      name: "Dd", from: "Papip", background: "bontot.jpg", photos: [],
+      messages: [
+      "Selamat Hari Anak, bontot kesayangan Papip!",
+      "Aduh, anak Papip satu ini sibuknya bukan main, ya? Rapat, tugas, project, belum lagi urusan semester akhir yang pasti makin hari makin banyak saja kerjaannya. Tapi Dd tahu nggak? Papip bangga sekali sama Dd. Keren banget bisa sampai sejauh ini dan tetap berusaha menyelesaikan satu per satu hal yang jadi tanggung jawabnya. Jangan lupa kasih tepuk tangan buat diri sendiri juga, ya, Cantik.",
+      "Tapi, di tengah segala kesibukan itu, jangan sampai Dd lupa istirahat. Jangan cuma sibuk mengejar deadline, tapi lupa kasih waktu buat diri sendiri bernapas. Sesekali tutup laptop, rebahan yang lama, makan enak, dan tentunya jangan lupa menikmati PondPhuwin kesayangan! WKWKWK. Semoga di sela-sela pusingnya tugas dan rapat, selalu ada tingkah PondPhuwin yang bisa bikin Dd senyum-senyum sendiri dan mengembalikan sedikit kewarasan.",
+      "Papip doakan semoga semua urusan Dd dimudahkan, project-nya berjalan lancar, tugas-tugasnya lekas selesai, dan semester akhirnya ditutup dengan banyak kabar baik. Semoga semua usaha yang Dd tanam sekarang bisa Dd petik hasil manisnya nanti.",
+      "Dan buat bontot Papip yang satu ini, jangan merasa harus selalu produktif untuk jadi anak yang membanggakan, ya. Dd sudah keren dengan segala hal yang Dd usahakan. Papip harap Dd tetap punya banyak alasan untuk bahagia, tetap bisa menikmati hal-hal kecil, dan nggak kehilangan sisi ceria yang Papip sayang.",
+      "Selamat Hari Anak, pentol lumernya Papip! Tetap jadi anak yang bahagia, ya. Kalau dunia lagi bikin capek, jangan lupa pulang sebentar ke tempat yang selalu punya banyak sayang buat Dd. Big hugs from Papip!🩶"
+      ]
+    }
   },
-  replies: [                         // auto replies when visitors send a message
-    "Terima kasih sudah balas! 🥰",
-    "Kamu juga hebat, lho!",
-    "Selamat Hari Anak Sedunia! 💛"
+  replies: [
+    "Sayang kamu! 🥰",
+    "Peluk jauh ya 🤗",
+    "Selamat Hari Anak! 💛"
   ],
   deco: ["#ff7eb6", "#ffd23f", "#4cc9f0", "#9b7bff", "#5ee0a0"]   // background confetti colors
 };
@@ -181,10 +252,11 @@ document.title = C.pageTitle;
 const P = new URLSearchParams(location.search), raw = (P.get("untuk") || P.get("u") || "").trim().slice(0, 30);
 const rec = (C.recipients || {})[raw.toLowerCase()] || {};
 const who = rec.name || (raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : C.defaultName || "kamu");
+const FROM = rec.from || C.name; document.title = rec.from ? "Pesan dari " + rec.from : C.pageTitle;
 const fill = t => String(t).replaceAll("{nama}", who);
-const MSGS = C.messages.concat(rec.extra || []).map(fill), PHOTOS = rec.photos || C.photos || [];
-$("name").textContent = C.name + " ›";
-if (C.avatar) $("av").style.backgroundImage = `url("${C.avatar}")`; else $("av").textContent = C.name.trim()[0] || "?";
+const MSGS = (rec.messages || C.messages).concat(rec.extra || []).map(fill), PHOTOS = rec.photos || C.photos || [];
+$("name").textContent = FROM + " ›";
+if (C.avatar) $("av").style.backgroundImage = `url("${C.avatar}")`; else $("av").textContent = FROM.trim()[0] || "?";
 $("stamp").innerHTML = `<b></b><br><span></span>`;
 $("stamp").firstChild.textContent = C.stamp[0]; $("stamp").lastChild.textContent = C.stamp[1];
 $("inp").placeholder = C.placeholder; $("inp").setAttribute("aria-label", C.placeholder);
@@ -275,7 +347,15 @@ C.backgrounds.forEach((b, i) => {
   x.onclick = () => { setBg(i); $("sheet").classList.remove("on"); };
   $("sheetB").appendChild(x);
 });
-setBg(C.background || 0);
+const bgPick = rec.background ?? C.background ?? 0;
+if (typeof bgPick === "string" && /\.(jpe?g|png|webp|gif|avif)$/i.test(bgPick)) {
+  document.querySelector(".screen").style.background = `url("${bgPick}") center/cover`;
+} else if (typeof bgPick === "string" && /^(url\(|linear-gradient|radial-gradient)/.test(bgPick)) {
+  document.querySelector(".screen").style.background = bgPick;
+} else {
+  setBg(typeof bgPick === "string" ? Math.max(0, C.backgrounds.findIndex(b => b.name.toLowerCase() === bgPick.toLowerCase())) : bgPick);
+}
+if (!C.allowBgSwitch) $("plus").style.visibility = "hidden";
 $("plus").onclick = () => $("sheet").classList.toggle("on");
 chat.addEventListener("pointerdown", () => $("sheet").classList.remove("on"));
 
@@ -302,7 +382,7 @@ if (C.music) { engine = C.music.src ? fileAudio(C.music.src) : synth(); $("mus")
 /* ---------- start (a tap lets browsers play sound) ---------- */
 function begin() { $("intro").classList.add("off"); setMusic(true); go(); }
 if (C.intro) {
-  $("iav").style.backgroundImage = C.avatar ? `url("${C.avatar}")` : ""; if (!C.avatar) $("iav").textContent = C.name.trim()[0] || "?";
+  $("iav").style.backgroundImage = C.avatar ? `url("${C.avatar}")` : ""; if (!C.avatar) $("iav").textContent = FROM.trim()[0] || "?";
   $("iT").textContent = fill(C.intro.title); $("iP").textContent = fill(C.intro.text); $("iB").textContent = C.intro.button; $("iB").onclick = begin; $("iB").focus();
 } else {
   $("intro").classList.add("off"); go();
