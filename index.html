@@ -133,7 +133,7 @@ const CONFIG = {
   delivered: "Terkirim",
   typingMs: 900,                    // pause before each bubble
   messages: [
-    "Haiii! 👋",
+    "Haiii, {nama}! 👋",
     "Hari ini tanggal 20 November, tahu nggak hari apa?",
     "Hari Anak Sedunia! 🎈",
     "Aku cuma mau bilang: kamu hebat, kamu berharga, dan boleh bermimpi setinggi apa pun ✨",
@@ -152,7 +152,7 @@ const CONFIG = {
   ],
   backgroundTitle: "Latar chat",
   music: { src: "", volume: 0.6 },   // src: "lagu.mp3" next to index.html. "" = built-in music box tune. Use music: false for no music.
-  intro: { title: "Ada pesan untukmu", text: "Ketuk untuk membuka dan mulai musik", button: "Buka pesan" },   // intro: false to skip
+  intro: { title: "Halo, {nama}!", text: "Ada pesan untukmu. Ketuk untuk membuka dan mulai musik", button: "Buka pesan" },   // intro: false to skip
   photos: [                          // photos shared at the end; visitors can download them
     { src: "", caption: "Foto kecil buat kamu 📸", file: "hari-anak-sedunia.png" }
     // { src: "foto1.jpg", caption: "Kenangan kita", file: "kenangan.jpg" },
@@ -161,6 +161,11 @@ const CONFIG = {
   closeLabel: "Tutup",
   cardText: ["Selamat", "Hari Anak", "Sedunia!"],   // text on the default photo (when src is "")
   cardFrom: "dari Kak Sinta",
+  defaultName: "teman kecil",        // used when the link has no name. {nama} in any text becomes the child's name
+  recipients: {                      // optional: special content for one child. Link: yoursite.vercel.app/?untuk=rina
+    // rina: { name: "Rina", extra: ["Rina, kakak bangga sama kamu karena rajin belajar 💛"], photos: [{ src: "rina.jpg", caption: "Foto buat Rina", file: "rina.jpg" }] },
+    // dimas: { name: "Dimas", extra: ["Dimas, jangan lupa main bola hari ini ⚽"] }
+  },
   replies: [                         // auto replies when visitors send a message
     "Terima kasih sudah balas! 🥰",
     "Kamu juga hebat, lho!",
@@ -172,6 +177,12 @@ const CONFIG = {
 
 const $ = id => document.getElementById(id), C = CONFIG, flow = $("flow"), chat = $("chat");
 document.title = C.pageTitle;
+/* one link per child: ?untuk=rina  (name from CONFIG.recipients, or any name typed in the link) */
+const P = new URLSearchParams(location.search), raw = (P.get("untuk") || P.get("u") || "").trim().slice(0, 30);
+const rec = (C.recipients || {})[raw.toLowerCase()] || {};
+const who = rec.name || (raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : C.defaultName || "kamu");
+const fill = t => String(t).replaceAll("{nama}", who);
+const MSGS = C.messages.concat(rec.extra || []).map(fill), PHOTOS = rec.photos || C.photos || [];
 $("name").textContent = C.name + " ›";
 if (C.avatar) $("av").style.backgroundImage = `url("${C.avatar}")`; else $("av").textContent = C.name.trim()[0] || "?";
 $("stamp").innerHTML = `<b></b><br><span></span>`;
@@ -214,7 +225,7 @@ async function say(text, who) {
   bubble(text, who);
 }
 const queue = (t, w) => (q = q.then(() => say(t, w)));
-C.messages.forEach(t => queue(t, "them"));
+MSGS.forEach(t => queue(t, "them"));
 
 const SAVE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>';
 function card() {
@@ -223,8 +234,8 @@ function card() {
   x.fillStyle = g; x.fillRect(0, 0, 900, 1100);
   C.deco.forEach((col, i) => { x.fillStyle = col; x.globalAlpha = .85; x.beginPath(); x.arc(140 + i * 170, 170 + (i % 2) * 780, 66 + i * 12, 0, 7); x.fill(); });
   x.globalAlpha = 1; x.fillStyle = "#1c1c1e"; x.textAlign = "center"; x.font = "700 96px -apple-system,Helvetica,Arial,sans-serif";
-  C.cardText.forEach((t, i) => x.fillText(t, 450, 470 + i * 115));
-  x.font = "500 42px -apple-system,Helvetica,Arial,sans-serif"; x.fillText(C.cardFrom, 450, 470 + C.cardText.length * 115 + 30);
+  C.cardText.forEach((t, i) => x.fillText(fill(t), 450, 470 + i * 115));
+  x.font = "500 42px -apple-system,Helvetica,Arial,sans-serif"; x.fillText(fill(C.cardFrom), 450, 470 + C.cardText.length * 115 + 30);
   return c.toDataURL("image/png");
 }
 async function save(src, file) {
@@ -249,7 +260,7 @@ async function sayPhoto(p) {
   const b = document.createElement("button"); b.className = "save glass"; b.innerHTML = SAVE_ICON + " "; b.append(C.saveLabel); b.onclick = e => { e.stopPropagation(); save(src, file); };
   m.appendChild(b); row.appendChild(m); flow.appendChild(row); last = { who: "them", m }; down();
 }
-(C.photos || []).forEach(p => { q = q.then(() => sayPhoto(p)); });
+PHOTOS.forEach(p => { q = q.then(() => sayPhoto(p)); });
 
 /* ---------- background ---------- */
 function setBg(i) {
@@ -292,7 +303,7 @@ if (C.music) { engine = C.music.src ? fileAudio(C.music.src) : synth(); $("mus")
 function begin() { $("intro").classList.add("off"); setMusic(true); go(); }
 if (C.intro) {
   $("iav").style.backgroundImage = C.avatar ? `url("${C.avatar}")` : ""; if (!C.avatar) $("iav").textContent = C.name.trim()[0] || "?";
-  $("iT").textContent = C.intro.title; $("iP").textContent = C.intro.text; $("iB").textContent = C.intro.button; $("iB").onclick = begin; $("iB").focus();
+  $("iT").textContent = fill(C.intro.title); $("iP").textContent = fill(C.intro.text); $("iB").textContent = C.intro.button; $("iB").onclick = begin; $("iB").focus();
 } else {
   $("intro").classList.add("off"); go();
   document.addEventListener("pointerdown", () => { if (!playing) setMusic(true); }, { once: true });

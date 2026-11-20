@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Buat link</title>
+<style>body{font:17px/1.5 -apple-system,system-ui,sans-serif;max-width:560px;margin:0 auto;padding:24px 16px;background:#eef4ff;color:#1c1c1e}
+h1{font-size:24px}label{display:block;font-weight:600;margin:16px 0 6px}
+input,textarea{width:100%;font:inherit;padding:12px;border:1px solid #bcd;border-radius:12px}
+button{font:inherit;font-weight:600;border:0;border-radius:20px;padding:10px 18px;background:#0a84ff;color:#fff;cursor:pointer;margin-top:12px}
+.r{display:flex;gap:8px;align-items:center;background:#fff;border-radius:14px;padding:8px 8px 8px 14px;margin-top:8px;word-break:break-all}
+.r span{flex:1;font-size:15px}.r button{margin:0;padding:7px 14px}</style></head><body>
+<h1>Buat link untuk tiap anak</h1>
+<label for="b">Alamat situsmu</label><input id="b" placeholder="https://nama-project.vercel.app">
+<label for="n">Nama anak (satu nama per baris)</label><textarea id="n" rows="6" placeholder="Rina&#10;Dimas&#10;Sari"></textarea>
+<button id="go">Buat link</button> <button id="all" style="background:#34c759">Salin semua</button>
+<div id="out"></div>
+<script>
+const $=id=>document.getElementById(id);let links=[];
+$("b").value=location.origin.startsWith("http")?location.origin:"";
+$("go").onclick=()=>{const base=$("b").value.trim().replace(/\/+$/,"");links=[];$("out").innerHTML="";
+$("n").value.split("\n").map(x=>x.trim()).filter(Boolean).forEach(n=>{const u=base+"/?untuk="+encodeURIComponent(n);links.push(n+": "+u);
+const r=document.createElement("div");r.className="r";r.innerHTML="<span></span><button>Salin</button>";r.firstChild.textContent=n+": "+u;
+r.lastChild.onclick=e=>{navigator.clipboard.writeText(u);e.target.textContent="Tersalin";};$("out").appendChild(r);});};
+$("all").onclick=e=>{navigator.clipboard.writeText(links.join("\n"));e.target.textContent="Tersalin";};
+</script></body></html>
