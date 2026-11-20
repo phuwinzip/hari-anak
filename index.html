@@ -125,9 +125,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Robot
    Leave "" to show the first letter of the name.
    ========================================================= */
 const CONFIG = {
-  pageTitle: "Pesan dari Moriel",
-  name: "Moriel",
-  avatar: "",
+  pageTitle: "Pesan dari Kak Sinta",
+  name: "Kak Sinta",
+  avatar: "iyel.jpg",
   stamp: ["iMessage", "Jumat 20.11"],
   placeholder: "iMessage",
   delivered: "Terkirim",
@@ -163,7 +163,7 @@ const CONFIG = {
   saveLabel: "Simpan foto",
   closeLabel: "Tutup",
   cardText: ["Selamat", "Hari Anak", "Sedunia!"],   // text on the default photo (when src is "")
-  cardFrom: "dari Moriel",
+  cardFrom: "dari Kak Sinta",
   defaultName: "teman kecil",        // used when the link has no name. {nama} in any text becomes the child's name
   recipients: {                      // one entry per person. Link: yoursite.vercel.app/?untuk=mamas
     // name       : who the message is for ({nama})
@@ -242,7 +242,7 @@ const CONFIG = {
     "Peluk jauh ya 🤗",
     "Selamat Hari Anak! 💛"
   ],
-  deco: ["#ff7eb6", "#ffd23f", "#4cc9f0", "#9b7bff", "#5ee0a0"]   // background confetti colors
+  deco: []                           // background circles. [] = none, so the background photo stays clear
 };
 /* ===================== END CONFIG ===================== */
 
@@ -252,11 +252,11 @@ document.title = C.pageTitle;
 const P = new URLSearchParams(location.search), raw = (P.get("untuk") || P.get("u") || "").trim().slice(0, 30);
 const rec = (C.recipients || {})[raw.toLowerCase()] || {};
 const who = rec.name || (raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : C.defaultName || "kamu");
-const FROM = rec.from || C.name; document.title = rec.from ? "Pesan dari " + rec.from : C.pageTitle;
+const FROM = rec.from || C.name, AVATAR = rec.avatar ?? C.avatar; document.title = rec.from ? "Pesan dari " + rec.from : C.pageTitle;
 const fill = t => String(t).replaceAll("{nama}", who);
 const MSGS = (rec.messages || C.messages).concat(rec.extra || []).map(fill), PHOTOS = rec.photos || C.photos || [];
 $("name").textContent = FROM + " ›";
-if (C.avatar) $("av").style.backgroundImage = `url("${C.avatar}")`; else $("av").textContent = FROM.trim()[0] || "?";
+if (AVATAR) $("av").style.backgroundImage = `url("${AVATAR}")`; else $("av").textContent = FROM.trim()[0] || "?";
 $("stamp").innerHTML = `<b></b><br><span></span>`;
 $("stamp").firstChild.textContent = C.stamp[0]; $("stamp").lastChild.textContent = C.stamp[1];
 $("inp").placeholder = C.placeholder; $("inp").setAttribute("aria-label", C.placeholder);
@@ -382,7 +382,7 @@ if (C.music) { engine = C.music.src ? fileAudio(C.music.src) : synth(); $("mus")
 /* ---------- start (a tap lets browsers play sound) ---------- */
 function begin() { $("intro").classList.add("off"); setMusic(true); go(); }
 if (C.intro) {
-  $("iav").style.backgroundImage = C.avatar ? `url("${C.avatar}")` : ""; if (!C.avatar) $("iav").textContent = FROM.trim()[0] || "?";
+  $("iav").style.backgroundImage = AVATAR ? `url("${AVATAR}")` : ""; if (!AVATAR) $("iav").textContent = FROM.trim()[0] || "?";
   $("iT").textContent = fill(C.intro.title); $("iP").textContent = fill(C.intro.text); $("iB").textContent = C.intro.button; $("iB").onclick = begin; $("iB").focus();
 } else {
   $("intro").classList.add("off"); go();
