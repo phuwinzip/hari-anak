@@ -237,18 +237,16 @@ const CONFIG = {
       ]
     }
   },
- /* replies: [
-    "Sayang kamu! 🥰",
-    "Peluk jauh ya 🤗",
-    "Selamat Hari Anak! 💛"
-  ], */
+  replies: [
+       "Ayo hidup lebih lama di dunia!"
+  ], 
   deco: []                           // background circles. [] = none, so the background photo stays clear
 };
 /* ===================== END CONFIG ===================== */
 
 const $ = id => document.getElementById(id), C = CONFIG, flow = $("flow"), chat = $("chat");
 document.title = C.pageTitle;
-/* one link per child: ?untuk=rina  (name from CONFIG.recipients, or any name typed in the link) */
+/* one link per child: ?untuk=dd  (name from CONFIG.recipients, or any name typed in the link) */
 const P = new URLSearchParams(location.search), raw = (P.get("untuk") || P.get("u") || "").trim().slice(0, 30);
 const rec = (C.recipients || {})[raw.toLowerCase()] || {};
 const who = rec.name || (raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : C.defaultName || "kamu");
