@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#bfe3ff">
+<title>Pesan</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#dfe8f5 radial-gradient(circle at 20% 15%,#ffd6e8,transparent 40%),radial-gradient(circle at 85% 80%,#fff0b3,transparent 45%),radial-gradient(circle at 70% 10%,#b8e2ff,transparent 40%);color:#1c1c1e}
+.stage{min-height:100%;display:grid;place-items:center;padding:20px}
+.phone{position:relative;width:392px;height:min(852px,94vh);background:#0b0b0d;border-radius:62px;padding:11px;box-shadow:0 0 0 2px #3a3a3e,0 40px 90px rgba(40,50,90,.4)}
+.screen{position:relative;height:100%;border-radius:51px;overflow:hidden;background:linear-gradient(165deg,#9bd7ff 0%,#ffd3e6 52%,#ffe7a1 100%)}
+.island{position:absolute;z-index:30;top:11px;left:50%;width:112px;height:32px;margin-left:-56px;border-radius:20px;background:#000}
+.status{position:absolute;z-index:25;top:0;left:0;right:0;height:54px;padding:18px 34px 0;display:flex;justify-content:space-between;font-weight:600;font-size:16px}
+.status svg{height:12px;margin-left:5px;vertical-align:-1px}
+.glass{background:rgba(255,255,255,.3);-webkit-backdrop-filter:blur(22px) saturate(1.8);backdrop-filter:blur(22px) saturate(1.8);border:1px solid rgba(255,255,255,.7);box-shadow:inset 0 1px 1px rgba(255,255,255,.95),inset 0 -1px 2px rgba(255,255,255,.25),0 6px 22px rgba(50,70,130,.14)}
+.top{position:absolute;z-index:20;top:58px;left:14px;right:14px;height:66px;display:flex;align-items:flex-start;justify-content:space-between;pointer-events:none;background:none;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+.top>*{pointer-events:auto}
+.circ{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border-radius:50%;color:#0a84ff;padding:0;cursor:pointer;font:inherit}
+.circ svg{width:22px;height:22px}
+.who{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:2px;padding:5px 16px 4px;border-radius:30px;min-width:96px}
+.av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#ff9ac1,#ffc861) center/cover;display:grid;place-items:center;color:#fff;font-weight:700;font-size:19px;border:2px solid rgba(255,255,255,.9)}
+.who small{font-size:11.5px;font-weight:500;color:#2c2c2e}
+.chat{position:absolute;inset:0;overflow-y:auto;padding:136px 14px 100px;scrollbar-width:none}
+.chat::-webkit-scrollbar{display:none}
+.deco{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;overflow:hidden}
+.deco i{position:absolute;border-radius:50%;opacity:.9}
+.flow{position:relative;display:flex;flex-direction:column;gap:3px;min-height:100%}
+.stamp{align-self:center;text-align:center;font-size:11.5px;color:#4a4a50;margin:2px 0 10px;line-height:1.35}
+.row{display:flex;position:relative}
+.row.me{justify-content:flex-end}
+.m{max-width:77%;padding:8px 14px 9px;font-size:17px;line-height:1.28;border-radius:21px;cursor:pointer;position:relative;word-wrap:break-word;animation:pop .35s cubic-bezier(.3,1.6,.5,1);transform-origin:var(--o)}
+.them .m{--o:bottom left;background:rgba(255,255,255,.42);-webkit-backdrop-filter:blur(18px) saturate(1.7);backdrop-filter:blur(18px) saturate(1.7);border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 1px rgba(255,255,255,.95),0 3px 12px rgba(50,70,130,.1)}
+.me .m{--o:bottom right;color:#fff;background:linear-gradient(180deg,rgba(60,160,255,.92),rgba(0,112,240,.94));-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 1px rgba(255,255,255,.55),0 4px 14px rgba(0,100,230,.28)}
+.them .m.end{border-bottom-left-radius:7px}
+.me .m.end{border-bottom-right-radius:7px}
+.m.big{background:none!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none;backdrop-filter:none;font-size:56px;line-height:1.1;padding:0 4px}
+.tap{position:absolute;top:-13px;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;font-size:15px;animation:pop .3s cubic-bezier(.3,1.8,.5,1)}
+.them .tap{right:-10px}.me .tap{left:-10px}
+.dots{display:flex;gap:5px;padding:13px 16px}
+.dots b{width:8px;height:8px;border-radius:50%;background:#8e8e93;animation:blink 1.1s infinite}
+.dots b:nth-child(2){animation-delay:.18s}.dots b:nth-child(3){animation-delay:.36s}
+.read{align-self:flex-end;font-size:11.5px;color:#4a4a50;margin:1px 4px 4px}
+@keyframes pop{from{transform:scale(.4);opacity:0}}
+@keyframes blink{0%,60%,100%{opacity:.3}30%{opacity:1}}
+.bar{position:absolute;z-index:20;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));display:flex;gap:10px;align-items:center}
+.bar .circ{flex:none;color:#3a3a3e}
+.field{flex:1;display:flex;align-items:center;border-radius:24px;padding:0 6px 0 16px;height:44px}
+.field input{flex:1;min-width:0;border:0;background:none;font:inherit;font-size:17px;outline:none;color:#1c1c1e}
+.field input::placeholder{color:#6d6d72}
+.send{width:32px;height:32px;border-radius:50%;border:0;background:#0a84ff;color:#fff;display:grid;place-items:center;cursor:pointer;opacity:0;transform:scale(.5);transition:.2s;padding:0}
+.send.on{opacity:1;transform:none}
+.send svg{width:16px;height:16px}
+.m.photo{padding:4px;width:min(74%,270px)}
+.m.photo img{display:block;width:100%;border-radius:17px;cursor:zoom-in}
+.m.photo .cap{padding:7px 8px 2px;font-size:16px}
+.save{display:flex;align-items:center;justify-content:center;gap:6px;margin:6px 2px 2px;padding:8px 14px;border-radius:20px;font:inherit;font-size:15px;font-weight:600;color:#0a84ff;cursor:pointer;width:calc(100% - 4px)}
+.save svg{width:17px;height:17px}
+.lb{position:absolute;z-index:40;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:70px 22px 34px;background:rgba(240,246,255,.55);-webkit-backdrop-filter:blur(26px);backdrop-filter:blur(26px)}
+.lb.on{display:flex}
+.lb img{max-width:100%;max-height:66%;border-radius:22px;box-shadow:0 20px 50px rgba(30,50,110,.35)}
+.lb .acts{display:flex;gap:12px}
+.lb button{padding:12px 24px;border-radius:30px;font:inherit;font-size:17px;font-weight:600;cursor:pointer;color:#0a84ff}
+.lb button.p{background:#0a84ff;color:#fff;border-color:transparent}
+.sheet{position:absolute;z-index:22;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));padding:14px 16px 16px;border-radius:28px;display:none}
+.sheet.on{display:block;animation:pop .3s cubic-bezier(.3,1.5,.5,1);transform-origin:bottom left}
+.sheet p{margin:0 0 10px;font-size:13px;font-weight:600;color:#3a3a3e}
+.sheet div{display:flex;gap:12px;flex-wrap:wrap}
+.sw2{width:54px;height:54px;border-radius:50%;border:2px solid #fff;cursor:pointer;padding:0;background-size:cover;background-position:center;box-shadow:0 3px 10px rgba(40,60,120,.25)}
+.sw2[aria-pressed=true]{box-shadow:0 0 0 3px #0a84ff}
+.intro{position:absolute;z-index:50;inset:0;display:flex;align-items:center;justify-content:center;padding:30px;background:rgba(235,244,255,.45);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px)}
+.intro.off{display:none}
+.intro .card{text-align:center;padding:34px 28px 28px;border-radius:36px;max-width:300px}
+.intro .av{width:84px;height:84px;margin:0 auto 14px;font-size:36px}
+.intro h2{margin:0 0 6px;font-size:24px}
+.intro p{margin:0 0 20px;color:#48484d;font-size:16px}
+.intro button{border:0;background:#0a84ff;color:#fff;font:inherit;font-size:17px;font-weight:600;padding:13px 30px;border-radius:30px;cursor:pointer;box-shadow:0 8px 20px rgba(10,132,255,.35)}
+.circ[aria-pressed=false] .on,.circ[aria-pressed=true] .offi{display:none}
+:focus-visible{outline:3px solid #0a84ff;outline-offset:2px}
+@media(max-width:520px){
+  .stage{padding:0}
+  .phone{width:100%;height:100dvh;border-radius:0;padding:0;box-shadow:none;background:none}
+  .screen{border-radius:0}
+  .island,.status{display:none}
+  .top{top:calc(8px + env(safe-area-inset-top))}
+  .chat{padding-top:calc(88px + env(safe-area-inset-top))}
+}
+@media(prefers-reduced-motion:reduce){.m,.tap,.dots b{animation:none}}
+</style>
+</head>
+<body>
+<div class="stage"><div class="phone"><div class="screen">
+  <div class="island"></div>
+  <div class="status"><span id="clock">9:41</span><span aria-hidden="true"><svg viewBox="0 0 18 12"><path d="M1 8h2v3H1zM5 6h2v5H5zM9 3.5h2V11H9zM13 1h2v10h-2z"/></svg><svg viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="#000" opacity=".4"/><rect x="2" y="2" width="19" height="8" rx="2"/><rect x="24" y="4" width="1.6" height="4" rx=".8" opacity=".4"/></svg></span></div>
+
+  <div class="top">
+    <button class="circ glass" aria-label="Kembali"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="who glass"><div class="av" id="av"></div><small id="name"></small></div>
+    <button class="circ glass" id="mus" aria-label="Musik" aria-pressed="false"><svg class="on" viewBox="0 0 24 24" fill="currentColor"><path d="M4 9.5v5h3.5l4.5 4v-13l-4.5 4zM15.5 8.5a5 5 0 010 7M18 6a8.5 8.5 0 010 12" fill-rule="evenodd" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><svg class="offi" viewBox="0 0 24 24" fill="currentColor"><path d="M4 9.5v5h3.5l4.5 4v-13l-4.5 4z"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  </div>
+
+  <div class="chat" id="chat" role="log" aria-live="polite">
+    <div class="deco" id="deco"></div>
+    <div class="flow" id="flow"><div class="stamp" id="stamp"></div></div>
+  </div>
+
+  <div class="bar">
+    <button class="circ glass" id="plus" aria-label="Ganti latar chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+    <div class="field glass">
+      <input id="inp" autocomplete="off" enterkeyhint="send">
+      <button class="send" id="send" aria-label="Kirim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+    </div>
+  </div>
+  <div class="sheet glass" id="sheet"><p id="sheetT"></p><div id="sheetB"></div></div>
+  <div class="intro" id="intro"><div class="card glass"><div class="av" id="iav"></div><h2 id="iT"></h2><p id="iP"></p><button id="iB"></button></div></div>
+  <div class="lb" id="lb" role="dialog" aria-modal="true"><img id="lbImg" alt=""><div class="acts"><button class="glass" id="lbClose"></button><button class="p" id="lbSave"></button></div></div>
+</div></div></div>
+
+<script>
+/* =========================================================
+   EDIT HERE. Name, photo, and every bubble come from CONFIG.
+   avatar: put a photo next to index.html (e.g. "foto.jpg") or use a URL.
+   Leave "" to show the first letter of the name.
+   ========================================================= */
+const CONFIG = {
+  pageTitle: "Pesan dari Kak Sinta",
+  name: "Kak Sinta",
+  avatar: "",
+  stamp: ["iMessage", "Jumat 20.11"],
+  placeholder: "iMessage",
+  delivered: "Terkirim",
+  typingMs: 900,                    // pause before each bubble
+  messages: [
+    "Haiii! 👋",
+    "Hari ini tanggal 20 November, tahu nggak hari apa?",
+    "Hari Anak Sedunia! 🎈",
+    "Aku cuma mau bilang: kamu hebat, kamu berharga, dan boleh bermimpi setinggi apa pun ✨",
+    "Boleh main, boleh salah, boleh bertanya. Semua anak berhak bahagia.",
+    "Jadi hari ini jangan lupa main yang banyak ya!",
+    "🥳",
+    "Peluk jauh dari aku 🤗"
+  ],
+  background: 0,                     // which background below to start with (0 = first)
+  backgrounds: [                     // visitors can switch with the + button. Use a gradient or a photo:
+    { name: "Langit", css: "linear-gradient(165deg,#9bd7ff 0%,#ffd3e6 52%,#ffe7a1 100%)" },
+    { name: "Permen", css: "linear-gradient(160deg,#ffb3d9,#ffd8a8 60%,#fff2a8)" },
+    { name: "Hutan",  css: "linear-gradient(165deg,#a8e6cf,#dcedc1 55%,#ffeaa7)" },
+    { name: "Malam",  css: "linear-gradient(165deg,#5b6bd6,#9b6bd6 55%,#ff9ac1)" }
+    // { name: "Fotoku", css: 'url("background.jpg")' },
+  ],
+  backgroundTitle: "Latar chat",
+  music: { src: "", volume: 0.6 },   // src: "lagu.mp3" next to index.html. "" = built-in music box tune. Use music: false for no music.
+  intro: { title: "Ada pesan untukmu", text: "Ketuk untuk membuka dan mulai musik", button: "Buka pesan" },   // intro: false to skip
+  photos: [                          // photos shared at the end; visitors can download them
+    { src: "", caption: "Foto kecil buat kamu 📸", file: "hari-anak-sedunia.png" }
+    // { src: "foto1.jpg", caption: "Kenangan kita", file: "kenangan.jpg" },
+  ],
+  saveLabel: "Simpan foto",
+  closeLabel: "Tutup",
+  cardText: ["Selamat", "Hari Anak", "Sedunia!"],   // text on the default photo (when src is "")
+  cardFrom: "dari Kak Sinta",
+  replies: [                         // auto replies when visitors send a message
+    "Terima kasih sudah balas! 🥰",
+    "Kamu juga hebat, lho!",
+    "Selamat Hari Anak Sedunia! 💛"
+  ],
+  deco: ["#ff7eb6", "#ffd23f", "#4cc9f0", "#9b7bff", "#5ee0a0"]   // background confetti colors
+};
+/* ===================== END CONFIG ===================== */
+
+const $ = id => document.getElementById(id), C = CONFIG, flow = $("flow"), chat = $("chat");
+document.title = C.pageTitle;
+$("name").textContent = C.name + " ›";
+if (C.avatar) $("av").style.backgroundImage = `url("${C.avatar}")`; else $("av").textContent = C.name.trim()[0] || "?";
+$("stamp").innerHTML = `<b></b><br><span></span>`;
+$("stamp").firstChild.textContent = C.stamp[0]; $("stamp").lastChild.textContent = C.stamp[1];
+$("inp").placeholder = C.placeholder; $("inp").setAttribute("aria-label", C.placeholder);
+
+const tick = () => { const d = new Date(); $("clock").textContent = d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0"); };
+tick(); setInterval(tick, 30000);
+
+// confetti behind the glass
+C.deco.forEach((c, i) => {
+  [[12, 8, 90], [78, 20, 60], [8, 42, 70], [70, 58, 100], [20, 78, 80]].slice(i % 2 ? 2 : 0, i % 2 ? 5 : 3).forEach(([x, y, s], j) => {
+    const e = document.createElement("i"); e.style.cssText = `left:${x + i * 3}%;top:${(y + i * 4) % 92}%;width:${s}px;height:${s}px;background:${c};filter:blur(${j % 2 ? 0 : 1}px)`;
+    $("deco").appendChild(e);
+  });
+});
+
+let go, q = new Promise(r => go = r), last = null, readEl = null, ri = 0;
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const down = () => chat.scrollTo({ top: chat.scrollHeight, behavior: matchMedia("(prefers-reduced-motion:reduce)").matches ? "auto" : "smooth" });
+
+function bubble(text, who) {
+  if (last && last.who === who) last.m.classList.remove("end");
+  const row = document.createElement("div"); row.className = "row " + who;
+  const m = document.createElement("div"); m.className = "m end"; m.textContent = text;
+  if (/^[\p{Extended_Pictographic}\u200d\ufe0f\s]{1,12}$/u.test(text)) m.classList.add("big");
+  m.onclick = () => {
+    const t = m.querySelector(".tap");
+    if (t) return t.remove();
+    const b = document.createElement("span"); b.className = "tap glass"; b.textContent = "❤️"; m.appendChild(b);
+  };
+  row.appendChild(m); flow.appendChild(row); last = { who, m }; down();
+}
+async function say(text, who) {
+  if (who === "them") {
+    const row = document.createElement("div"); row.className = "row them";
+    row.innerHTML = '<div class="m dots end"><b></b><b></b><b></b></div>'; flow.appendChild(row); down();
+    await wait(C.typingMs + Math.min(text.length * 12, 900)); row.remove();
+  }
+  bubble(text, who);
+}
+const queue = (t, w) => (q = q.then(() => say(t, w)));
+C.messages.forEach(t => queue(t, "them"));
+
+const SAVE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>';
+function card() {
+  const c = document.createElement("canvas"); c.width = 900; c.height = 1100; const x = c.getContext("2d");
+  const g = x.createLinearGradient(0, 0, 900, 1100); g.addColorStop(0, "#9bd7ff"); g.addColorStop(.55, "#ffd3e6"); g.addColorStop(1, "#ffe7a1");
+  x.fillStyle = g; x.fillRect(0, 0, 900, 1100);
+  C.deco.forEach((col, i) => { x.fillStyle = col; x.globalAlpha = .85; x.beginPath(); x.arc(140 + i * 170, 170 + (i % 2) * 780, 66 + i * 12, 0, 7); x.fill(); });
+  x.globalAlpha = 1; x.fillStyle = "#1c1c1e"; x.textAlign = "center"; x.font = "700 96px -apple-system,Helvetica,Arial,sans-serif";
+  C.cardText.forEach((t, i) => x.fillText(t, 450, 470 + i * 115));
+  x.font = "500 42px -apple-system,Helvetica,Arial,sans-serif"; x.fillText(C.cardFrom, 450, 470 + C.cardText.length * 115 + 30);
+  return c.toDataURL("image/png");
+}
+async function save(src, file) {
+  try {
+    const b = await (await fetch(src)).blob(), u = URL.createObjectURL(b), a = document.createElement("a");
+    a.href = u; a.download = file; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 3000);
+  } catch (e) { const a = document.createElement("a"); a.href = src; a.download = file; a.target = "_blank"; a.click(); }
+}
+function openPhoto(src, file) { $("lbImg").src = src; $("lbSave").onclick = () => save(src, file); $("lb").classList.add("on"); $("lbSave").focus(); }
+$("lbSave").innerHTML = SAVE_ICON + " "; $("lbSave").append(C.saveLabel); $("lbClose").textContent = C.closeLabel;
+$("lbClose").onclick = () => $("lb").classList.remove("on");
+async function sayPhoto(p) {
+  const src = p.src || card(), file = p.file || "foto.png";
+  const dr = document.createElement("div"); dr.className = "row them"; dr.innerHTML = '<div class="m dots end"><b></b><b></b><b></b></div>'; flow.appendChild(dr); down();
+  await wait(C.typingMs + 600); dr.remove();
+  if (last && last.who === "them") last.m.classList.remove("end");
+  const row = document.createElement("div"); row.className = "row them";
+  const m = document.createElement("div"); m.className = "m photo end";
+  const img = document.createElement("img"); img.src = src; img.alt = p.caption || "Foto"; img.onclick = () => openPhoto(src, file); img.onload = down;
+  m.appendChild(img);
+  if (p.caption) { const c = document.createElement("div"); c.className = "cap"; c.textContent = p.caption; m.appendChild(c); }
+  const b = document.createElement("button"); b.className = "save glass"; b.innerHTML = SAVE_ICON + " "; b.append(C.saveLabel); b.onclick = e => { e.stopPropagation(); save(src, file); };
+  m.appendChild(b); row.appendChild(m); flow.appendChild(row); last = { who: "them", m }; down();
+}
+(C.photos || []).forEach(p => { q = q.then(() => sayPhoto(p)); });
+
+/* ---------- background ---------- */
+function setBg(i) {
+  const b = C.backgrounds[i]; if (!b) return;
+  document.querySelector(".screen").style.background = /^url\(/.test(b.css) ? b.css + " center/cover" : b.css;
+  [...$("sheetB").children].forEach((x, k) => x.setAttribute("aria-pressed", k === i));
+}
+$("sheetT").textContent = C.backgroundTitle;
+C.backgrounds.forEach((b, i) => {
+  const x = document.createElement("button"); x.className = "sw2"; x.setAttribute("aria-label", b.name); x.title = b.name;
+  x.style.background = /^url\(/.test(b.css) ? b.css + " center/cover" : b.css;
+  x.onclick = () => { setBg(i); $("sheet").classList.remove("on"); };
+  $("sheetB").appendChild(x);
+});
+setBg(C.background || 0);
+$("plus").onclick = () => $("sheet").classList.toggle("on");
+chat.addEventListener("pointerdown", () => $("sheet").classList.remove("on"));
+
+/* ---------- music ---------- */
+let playing = false, engine = null;
+function synth() {
+  let ac, timer, step = 0, next = 0, master;
+  const mel = [72,76,79,76,72,76,79,84, 71,74,79,74,71,74,79,83, 69,72,76,72,69,72,76,81, 67,71,74,71,67,71,74,79], bass = [48,43,45,43];
+  const f = m => 440 * Math.pow(2, (m - 69) / 12);
+  const note = (m, t, d, v, type) => { const o = ac.createOscillator(), g = ac.createGain(); o.type = type; o.frequency.value = f(m);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + .01); g.gain.exponentialRampToValueAtTime(.001, t + d); o.connect(g); g.connect(master); o.start(t); o.stop(t + d + .05); };
+  const sched = () => { while (next < ac.currentTime + .5) { note(mel[step], next, .5, .5, "sine"); note(mel[step] + 12, next, .25, .08, "sine");
+    if (step % 8 === 0) note(bass[step / 8], next, 1.6, .5, "triangle"); next += .23; step = (step + 1) % 32; } };
+  return {
+    start() { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); master = master || Object.assign(ac.createGain(), {}); master.gain.value = (C.music.volume ?? .6) * .22; master.connect(ac.destination);
+      ac.resume(); next = ac.currentTime + .05; sched(); timer = setInterval(sched, 120); },
+    stop() { clearInterval(timer); try { master.disconnect(); } catch (e) {} }
+  };
+}
+function fileAudio(src) { const a = new Audio(src); a.loop = true; a.volume = C.music.volume ?? .6; return { start: () => a.play().catch(() => {}), stop: () => a.pause() }; }
+function setMusic(on) { if (!engine) return; playing = on; on ? engine.start() : engine.stop(); $("mus").setAttribute("aria-pressed", on); }
+if (C.music) { engine = C.music.src ? fileAudio(C.music.src) : synth(); $("mus").onclick = () => setMusic(!playing); } else $("mus").style.visibility = "hidden";
+
+/* ---------- start (a tap lets browsers play sound) ---------- */
+function begin() { $("intro").classList.add("off"); setMusic(true); go(); }
+if (C.intro) {
+  $("iav").style.backgroundImage = C.avatar ? `url("${C.avatar}")` : ""; if (!C.avatar) $("iav").textContent = C.name.trim()[0] || "?";
+  $("iT").textContent = C.intro.title; $("iP").textContent = C.intro.text; $("iB").textContent = C.intro.button; $("iB").onclick = begin; $("iB").focus();
+} else {
+  $("intro").classList.add("off"); go();
+  document.addEventListener("pointerdown", () => { if (!playing) setMusic(true); }, { once: true });
+}
+
+function submit() {
+  const v = $("inp").value.trim(); if (!v) return;
+  $("inp").value = ""; $("send").classList.remove("on");
+  bubble(v, "me");
+  if (readEl) readEl.remove();
+  readEl = document.createElement("div"); readEl.className = "read"; readEl.textContent = C.delivered; flow.appendChild(readEl); down();
+  if (C.replies.length) queue(C.replies[ri++ % C.replies.length], "them").then(() => { if (readEl) readEl.remove(), readEl = null; });
+}
+$("send").onclick = submit;
+$("inp").addEventListener("keydown", e => { if (e.key === "Enter") submit(); });
+$("inp").addEventListener("input", () => $("send").classList.toggle("on", $("inp").value.trim().length > 0));
+</script>
+</body>
+</html>
